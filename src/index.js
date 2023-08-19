@@ -186,8 +186,13 @@ async function loadHotels(){
 function generatecharacterprice(numero) {
   return "$".repeat(numero);
 }
+//Create div with alert message
+const messageAlert = document.createElement("div")
+messageAlert.id= "message-alert"
+messageAlert.textContent = "No hay ningún hotel con los filtros seleccionados, prueba otras"
 
-// Create constant to return inputs to initial values
+
+// Create const to return inputs to initial values
 const initialValues = {
     filterPrices: filterPrices.value,
     dateFromInput: dateFromInput.value,
@@ -200,14 +205,14 @@ const initialValues = {
 //Function to apply filters
 function applyFilters(){  
 
-  //Create constants to identify selected option
+  //Create consts to identify selected option
   const getValuePrices = parseInt(filterPrices.value)
   const getValueCountry = filterCountries.value;
   const getValueSize = filterSizes.value;
   const dateFrom = new Date(dateFromInput.value).getTime();
   const dateTo = new Date(dateToInput.value).getTime();
   
-  //Constant defining the filters to be applied
+  //const defining the filters to be applied
   const filterHotels = json.filter((hotel)=> {
     let country = true;
     if(getValueCountry !== "all"){
@@ -231,15 +236,26 @@ function applyFilters(){
     let date = true;
     if (dateFrom && dateTo) {
 
-      // Constants to calculate the difference between the selected days and those of the API
+      // Consts to calculate the difference between the selected days and those of the API
       const differenceTimeHotel = Math.ceil(Math.abs(hotel.availabilityTo - hotel.availabilityFrom));
       const differenceTimeSelected = Math.ceil(Math.abs(dateTo - dateFrom));
       date = differenceTimeSelected  <= differenceTimeHotel ;      
     }
-
+    
     return country && prices && size && date
   
-  })
+  }) 
+
+  //Show message in case no hotels were found
+  if (filterHotels.length === 0) {  
+    main.appendChild(messageAlert)    
+  } else{
+    const existingMessageAlert = document.getElementById ("message-alert")
+    if(existingMessageAlert){
+      existingMessageAlert.remove();
+    }  
+  }
+  
   getHotels(filterHotels)
 }
 
@@ -264,7 +280,7 @@ buttonFilter.addEventListener("click", async () => {
   dateToInput.value = initialValues.dateToInput;
   filterCountries.value = initialValues.filterCountries;
   filterSizes.value = initialValues.filterSizes
-  section.innerHTML = "";
+  main.innerHTML = "";
     await loadHotels();
 });
 
