@@ -189,7 +189,7 @@ function generatecharacterprice(numero) {
 //Create div with alert message
 const messageAlert = document.createElement("div")
 messageAlert.id= "message-alert"
-messageAlert.textContent = "No hay ningún hotel con los filtros seleccionados, prueba otras"
+messageAlert.textContent = "No hay ningún hotel con los filtros seleccionados, prueba otras combinaciones."
 
 
 // Create const to return inputs to initial values
